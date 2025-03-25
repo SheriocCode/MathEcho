@@ -305,6 +305,7 @@ def stream_chat():
                 stream=True,  # 流式输出
                 incremental_output=True)  # 增量输出
     else:
+        # 后续对话，需传入api_session_id
         responses = Application.call(
                 api_key=ApiKeyConfig.DASHSCOPE_API_KEY, 
                 app_id=ApiKeyConfig.LONG_SESSION_AGENT_ID,
@@ -324,6 +325,7 @@ def stream_chat():
                 # print(content, end='')
                 yield content
 
+        # 保持上下文
         with app.app_context():
             # TODO: 结果入库
             console.print(f'\n[blue]@stream_chat - save to db(add_question_answer)[/blue]')
@@ -376,7 +378,7 @@ def read_json_file(file_path):
 
 if __name__ == "__main__":
     # 缓存加载关键词
-    knowledge_data = read_json_file('E:\Desktop\LawAI\Demo\文本解析\knowledge.json')
+    knowledge_data = read_json_file('instance/knowledge.json')
     knowledge_keywords = []
     for item in knowledge_data:
         knowledge_keywords.append({
